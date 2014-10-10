@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<info>
+    <id>react</id>
+    <name>React</name>
+    <description></description>
+    <licence>MIT</licence>
+    <author>Robin Appelman</author>
+    <version>0.0.1</version>
+    <requiremin>7.0.0</requiremin>
+</info>

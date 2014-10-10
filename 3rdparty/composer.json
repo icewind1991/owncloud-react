@@ -1,0 +1,8 @@
+{
+	"config": {
+		"vendor-dir": "."
+	},
+	"require": {
+		"react/react": "0.4.*"
+	}
+}
