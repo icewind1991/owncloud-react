@@ -22,6 +22,11 @@ class Auth extends AbstractBasic {
 	protected $userSession;
 
 	/**
+	 * @var array
+	 */
+	protected $usersSetup = [];
+
+	/**
 	 * @param \OCP\IUserSession $userSession
 	 */
 	public function __construct(IUserSession $userSession) {
@@ -35,8 +40,12 @@ class Auth extends AbstractBasic {
 	 */
 	protected function validateUserPass($username, $password) {
 		if ($this->userSession->login($username, $password)) {
-			\OC_Util::setUpFS($this->userSession->getUser()->getUID());
-			Filesystem::initMountPoints($this->userSession->getUser()->getUID());
+			$userId = $this->userSession->getUser()->getUID();
+			if (!isset($this->usersSetup[$userId])) {
+				\OC_Util::setUpFS($userId);
+				Filesystem::initMountPoints($userId);
+				$this->usersSetup[$userId] = true;
+			}
 			return true;
 		} else {
 			return false;
