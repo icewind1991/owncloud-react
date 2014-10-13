@@ -32,6 +32,7 @@ class Request extends \Sabre\HTTP\Request {
 	public function __construct(\React\Http\Request $request, $body, $https = false) {
 		$this->request = $request;
 		$this->body = $body;
+		$this->root = $root;
 		$this->https = $https;
 	}
 
@@ -206,6 +207,9 @@ class Request extends \Sabre\HTTP\Request {
 			case 'PHP_AUTH_PW':
 				list(, $pass) = $this->getBasicAuth();
 				return $pass;
+			case 'REDIRECT_HTTP_AUTHORIZATION':
+				//no need for this since it's for fastcgi compatibility
+				return null;
 		}
 		echo "raw server value not supported($field)\n";
 		return null;

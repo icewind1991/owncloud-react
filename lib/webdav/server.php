@@ -23,8 +23,14 @@ class Server extends \OCA\React\Server {
 	 */
 	protected $sabre;
 
-	public function __construct(LoopInterface $loop = null) {
+	/**
+	 * @var string
+	 */
+	protected $root;
+
+	public function __construct($root, LoopInterface $loop = null) {
 		parent::__construct($loop);
+		$this->root = $root;
 
 		// Backends
 		$userSession = \OC::$server->getUserSession();
@@ -34,7 +40,7 @@ class Server extends \OCA\React\Server {
 		// Fire up server
 		$objectTree = new \OC\Connector\Sabre\ObjectTree();
 		$this->sabre = new \OC_Connector_Sabre_Server($objectTree);
-		$this->sabre->setBaseUri('');
+		$this->sabre->setBaseUri($root);
 
 		// Load plugins
 		$defaults = new \OC_Defaults();
@@ -58,6 +64,10 @@ class Server extends \OCA\React\Server {
 
 //			$this->sabre->addPlugin(new \OC_Connector_Sabre_QuotaPlugin($view));
 		}, 30); // priority 30: after auth (10) and acl(20), before lock(50) and handling the request
+
+		$this->sabre->subscribeEvent('beforeMethod', function ($method, $uri) {
+			echo "$method '$uri'\n";
+		});
 	}
 
 
@@ -81,7 +91,8 @@ class Server extends \OCA\React\Server {
 				$sabreResponse->end();
 			} catch (\Exception $e) {
 				$response->write("Exception: \n");
-				$response->end($e->getMessage());
+				$response->write($e->getMessage());
+				$sabreResponse->end();
 			}
 		});
 	}
