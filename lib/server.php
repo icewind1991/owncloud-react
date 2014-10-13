@@ -67,14 +67,12 @@ abstract class Server {
 				$part = trim($part);
 				list($name, $value) = explode('=', $part);
 				if ($name === 'PHPSESSID') {
-					echo "sessid: $value\n";
 					$this->loadSession($value);
 					return;
 				}
 			}
 		}
 		\OC::$server->setSession(new Memory(''));
-		echo "no sessid\n";
 	}
 
 	/**
