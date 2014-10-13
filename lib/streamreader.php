@@ -64,7 +64,7 @@ class StreamReader extends WritableStream implements PromisorInterface {
 		$this->received += strlen($data);
 		fwrite($this->temp, $data);
 		$this->deferred->progress($data);
-		if ($this->received >= -$this->contentLength) {
+		if ($this->received >= $this->contentLength) {
 			$this->close();
 		}
 	}
