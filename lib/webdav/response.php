@@ -75,6 +75,31 @@ class Response extends \Sabre\HTTP\Response {
 	}
 
 	/**
+	 * Adds a HTTP header.
+	 *
+	 * This method will not overwrite any existing HTTP header, but instead add
+	 * another value. Individual values can be retrieved with
+	 * getHeadersAsArray.
+	 *
+	 * @param string $name
+	 * @param string $value
+	 * @return void
+	 */
+	function addHeader($name, $value) {
+
+		$lName = strtolower($name);
+		if (isset($this->headers[$lName])) {
+			$this->headers[$name] = array_merge(
+				$this->headers[$name],
+				(array)$value
+			);
+		} else {
+			$this->headers[$name] = (array)$value;
+		}
+
+	}
+
+	/**
 	 * Sets a bunch of HTTP Headers
 	 *
 	 * headersnames are specified as keys, value in the array value
@@ -118,6 +143,6 @@ class Response extends \Sabre\HTTP\Response {
 
 	public function end() {
 		$this->sendHeaders();
-		$this->response->end();
+		$this->response->end($this->getBody());
 	}
 }

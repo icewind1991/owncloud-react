@@ -13,6 +13,6 @@ require_once __DIR__ . '/../../lib/base.php';
 
 \OC::init();
 
-$server = new \OCA\React\WebDAV\Server('/react');
+$server = new \OCA\React\WebDAV\Server('/');
 $port = (int)\OC::$server->getConfig()->getAppValue('react', 'port', 8080);
 $server->run($port);
